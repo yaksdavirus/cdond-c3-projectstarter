@@ -84,7 +84,8 @@ jobs:
 
                 
   test-backend:
-    docker: circleci/node:13.8.0
+    docker: 
+    - image: circleci/node:13.8.0
       # Docker image here
     steps:
     - checkout
