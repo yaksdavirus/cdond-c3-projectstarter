@@ -134,35 +134,35 @@ jobs:
       # Docker image here that supports AWS CLI
     steps:
       # Checkout code from git
-      - run:
-          name: Ensure back-end infrastructure exists
-          command: |
-            aws cloudformation deploy \
-            --template-file .circleci/files/backend.yml \
-            --tags project=your-tag \
-            --stack-name ${workflow_id:0:5} \
-            --parameter-overrides ID=${workflow_id:0:5}  
-              #exit 1
-      - run:
-          name: Ensure front-end infrastructure exist
-          command: |
-            aws cloudformation deploy \
-            --template-file .circleci/files/frontend.yml \
-            --tags project=your-tag \
-            --stack-name ${workflow_id:0:7} \
-            --parameter-overrides ID=${workflow_id:0:7}  
-              #exit 1
-      - run:
-          name: Add back-end ip to ansible inventory
-          command: |
-            aws ec2 describe-instances \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --output text >> .circleci/ansible/inventory.txt
-            # exit 1
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/.circleci/ansible/inventory.txt
+    - run:
+        name: Ensure back-end infrastructure exists
+        command: |
+          aws cloudformation deploy \
+          --template-file .circleci/files/backend.yml \
+          --tags project=your-tag \
+          --stack-name ${workflow_id:0:5} \
+          --parameter-overrides ID=${workflow_id:0:5}  
+            #exit 1
+    - run:
+        name: Ensure front-end infrastructure exist
+        command: |
+          aws cloudformation deploy \
+          --template-file .circleci/files/frontend.yml \
+          --tags project=your-tag \
+          --stack-name ${workflow_id:0:7} \
+          --parameter-overrides ID=${workflow_id:0:7}  
+            #exit 1
+    - run:
+        name: Add back-end ip to ansible inventory
+        command: |
+          aws ec2 describe-instances \
+          --query 'Reservations[*].Instances[*].PublicIpAddress' \
+          --output text >> .circleci/ansible/inventory.txt
+          # exit 1
+    - persist_to_workspace:
+        root: ~/
+        paths:
+          - project/.circleci/ansible/inventory.txt
        # Here's where you will add some code to rollback on failure      
 
 #   configure-infrastructure:
