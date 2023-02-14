@@ -17,7 +17,7 @@ commands:
             aws cloudformation delete-stack --stack-name UdaPeople-backend-${workflow_id:0:7}
             aws cloudformation delete-stack --stack-name UdaPeople-frontend-${workflow_id:0:7}
             aws s3 rb s3://UdaPeople-${workflow_id:0:7} --force
-            exit 1
+            #exit 1
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
