@@ -184,19 +184,19 @@ jobs:
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
-      - run:
-          name: Install dependencies
-          command: |
-            # Your code here
-            apk add --update ansible
-            pip install awscli
-            #exit 1
-      - run:
-          name: Configure server
-          command: |
-            # Your code here
-            ansible-playbook .circleci/ansible/configure-server.yml -i .circleci/ansible/inventory.txt
-            #exit 1
+    - run:
+        name: Install dependencies
+        command: |
+          # Your code here
+          apk add --update ansible
+          pip install awscli
+          #exit 1
+    - run:
+        name: Configure server
+        command: |
+          # Your code here
+          ansible-playbook .circleci/ansible/configure-server.yml -i .circleci/ansible/inventory.txt
+          #exit 1
       # Here's where you will add some code to rollback on failure      
 
 #   run-migrations:
