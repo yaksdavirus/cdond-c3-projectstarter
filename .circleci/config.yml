@@ -213,7 +213,7 @@ jobs:
         command: |
           # Your code here
           cd backend
-          apt install npm
+          sudo apt install npm
           npm run migrations > migrations_dump.txt
           #exit 1
     - run:
