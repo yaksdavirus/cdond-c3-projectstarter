@@ -236,7 +236,7 @@ jobs:
       # Docker image here that supports AWS CLI
     steps:
       # Checkout code from git
-      -checkout
+      - checkout
       - restore_cache:
           keys: [frontend-build]
       - run:
