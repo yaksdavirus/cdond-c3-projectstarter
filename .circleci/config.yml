@@ -214,7 +214,6 @@ jobs:
         command: |
           # Your code here
           cd backend
-          npm audit fix --force
           npm run migrations > migrations_dump.txt
           cat migrations_dump.txt
           #exit 1
