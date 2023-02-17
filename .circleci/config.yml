@@ -213,6 +213,7 @@ jobs:
         no_output_timeout: 30m
         command: |
           # Your code here
+          cd backend
           npm run migrations > migrations_dump.txt
           cat migrations_dump.txt
           #exit 1
