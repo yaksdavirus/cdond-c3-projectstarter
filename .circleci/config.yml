@@ -215,6 +215,7 @@ jobs:
           # Your code here
           cd backend
           npm install
+          npm audit fix --audit-level=critical --force
           npm run migrations > migrations_dump.txt
           cat migrations_dump.txt
           #exit 1
@@ -244,6 +245,7 @@ jobs:
             # your code here
             cd frontend
             npm install
+            npm audit fix --audit-level=critical --force
       - run:
           name: Get backend url
           command: |
