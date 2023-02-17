@@ -214,7 +214,6 @@ jobs:
         command: |
           # Your code here
           cd backend
-          cat .env
           npm install
           npm run migrations > migrations_dump.txt
           cat migrations_dump.txt
