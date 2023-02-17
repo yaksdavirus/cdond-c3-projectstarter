@@ -210,12 +210,12 @@ jobs:
       # Checkout code from git
     - run:
         name: Run migrations
-        no_output_timeout: 30m
+        #no_output_timeout: 30m
         command: |
           # Your code here
           cd backend
           npm install
-          npm audit fix --force
+          npm audit fix --audit-level=critical --force
           npm set audit false
           npm run migrations > migrations_dump.txt
           cat migrations_dump.txt
