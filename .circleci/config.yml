@@ -263,6 +263,7 @@ jobs:
           name: Deploy frontend objects
           command: |
             # your code here
+            cd frontend
             sudo apt update
             sudo apt install -y awscli
             sudo npm install
