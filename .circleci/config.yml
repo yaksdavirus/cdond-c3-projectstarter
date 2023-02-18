@@ -1,41 +1,6 @@
 version: 2.1
 
 commands:
-  install_awscli:
-    description: install aws cli v2
-    steps:
-      - run:
-          name: install aws cli v2
-          command: |
-            cd frontend
-            sudo apt-get update && sudo apt-get install -yy less
-            sudo apt-get install unzip
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
-
-  install_ansible:
-    description: install ansible
-    steps:
-      - run:
-          name: install ansible
-          command: |
-            cd frontenf
-            sudo apt update  
-            sudo apt install software-properties-common -y
-            sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install ansible -y
-
-  install_nodejs:
-    description: install nodejs 13
-    steps:
-      - run:
-          name: install Node.js 13
-          command: |
-            cd frontend
-            curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
-            sudo apt install -y nodejs
-
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
@@ -268,21 +233,21 @@ jobs:
 
   deploy-frontend:
     docker:
-     - image: amazon/aws-cli
+     - image: circleci/node:13.8.0
+       user: root
       # Docker image here that supports AWS CLI
     steps:
       # Checkout code from git
       - checkout
-      - install_awscli
-      - install_nodejs
       - restore_cache:
           keys: [frontend-build]
       - run:
           name: Install dependencies
           command: |
             # your code here
-            cd frontend
-            npm install
+            sudo apt update
+            sudo apt install -y awscli
+            sudo npm install
       - run:
           name: Get backend url
           command: |
