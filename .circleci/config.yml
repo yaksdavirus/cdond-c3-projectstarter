@@ -245,8 +245,9 @@ jobs:
           command: |
             # your code here
             cd frontend
-            npm install
-            npm audit fix --force
+            sudo apt update
+            sudo apt install -y awscli
+            sudo npm install
       - run:
           name: Get backend url
           command: |
