@@ -7,7 +7,8 @@ commands:
       - run:
           name: install aws cli v2
           command: |
-            sudo apt-get update  
+            cd frontend
+            sudo apt-get update && sudo apt-get install -yy less
             sudo apt-get install unzip
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
@@ -19,6 +20,7 @@ commands:
       - run:
           name: install ansible
           command: |
+            cd frontenf
             sudo apt update  
             sudo apt install software-properties-common -y
             sudo add-apt-repository --yes --update ppa:ansible/ansible
@@ -30,6 +32,7 @@ commands:
       - run:
           name: install Node.js 13
           command: |
+            cd frontend
             curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
             sudo apt install -y nodejs
 
@@ -270,7 +273,7 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      #- install_awscli
+      - install_awscli
       - install_nodejs
       - restore_cache:
           keys: [frontend-build]
