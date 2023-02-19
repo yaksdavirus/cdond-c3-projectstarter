@@ -300,7 +300,6 @@ jobs:
           pip install awscli             
       - run:
           name: Deploy backend
-          command: |
           no_output_timeout: 10m
           command: |
           echo [web] > inventory.txt
