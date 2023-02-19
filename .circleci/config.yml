@@ -284,35 +284,35 @@ jobs:
       # Docker image here that supports Ansible
     - image: python:3.7-alpine3.11
     steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints: ["df:f3:b3:80:88:59:aa:1b:ea:5b:45:27:85:62:a3:e2"]
-      - attach_workspace:
-            at: ~/
-        # Checkout code from git
-        # Add ssh keys with fingerprint
-        # attach workspace
-        - run:
-            name: Install dependencies
-            command: |
-              # your code here
-            apk add --update ansible npm nodejs curl tar gzip
-            pip install awscli             
-        - run:
-            name: Deploy backend
-            command: |
-          no_output_timeout: 10m
-          command: |
-            echo [web] > inventory.txt
-            aws ec2 describe-instances \
-              --region us-west-2 \
-              --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query 'Reservations[*].Instaces[*].PublicIpAddress' \
-              --output text >> inventory.txt
-            cd .circleci/ansible
-            ansible-playbook -i inventory.txt deploy-backend.yml
-              # your code here
-        # Here's where you will add some code to rollback on failure  
+    - checkout
+    - add_ssh_keys:
+        fingerprints: ["df:f3:b3:80:88:59:aa:1b:ea:5b:45:27:85:62:a3:e2"]
+    - attach_workspace:
+          at: ~/
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      # attach workspace
+    - run:
+        name: Install dependencies
+        command: |
+          # your code here
+        apk add --update ansible npm nodejs curl tar gzip
+        pip install awscli             
+    - run:
+        name: Deploy backend
+        command: |
+      no_output_timeout: 10m
+      command: |
+        echo [web] > inventory.txt
+        aws ec2 describe-instances \
+          --region us-west-2 \
+          --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+          --query 'Reservations[*].Instaces[*].PublicIpAddress' \
+          --output text >> inventory.txt
+        cd .circleci/ansible
+        ansible-playbook -i inventory.txt deploy-backend.yml
+          # your code here
+    # Here's where you will add some code to rollback on failure  
 
 #   smoke-test:
 #     docker:
