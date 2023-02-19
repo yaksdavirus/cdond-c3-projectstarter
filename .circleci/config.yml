@@ -298,8 +298,6 @@ jobs:
           no_output_timeout: 10m
           command: |
             cd backend
-            apt update
-            apt install -y awscli
             npm install
             npm run build
             cd ..
