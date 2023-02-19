@@ -298,10 +298,10 @@ jobs:
           no_output_timeout: 10m
           command: |
             cd backend
-            sudo apt update
-            sudo apt install -y awscli
-            sudo npm install
-            sudo npm run build
+            apt update
+            apt install -y awscli
+            npm install
+            npm run build
             cd ..
             tar -C backend -czvf code.tar.gz .
             mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
