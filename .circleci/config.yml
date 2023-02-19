@@ -269,7 +269,12 @@ jobs:
             sudo npm install
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
-            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+            #aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      - aws-s3/copy:
+          aws-region: us-west-2
+          arguments: '--recursive'
+          from: ~/project/frontend/dist
+          to: 's3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}'
       # Here's where you will add some code to rollback on failure      
                     
 #   deploy-backend:
