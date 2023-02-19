@@ -3,41 +3,36 @@ orbs:
   aws-s3: circleci/aws-s3@2.0.0
 
 commands:
+
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
-      # Add parameter here  
-      workflow_id:
+      workflow-id:
         type: string
-        default: "${CIRCLE_WORKFLOW_ID}" 
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - run:
           name: Destroy environments
           when: on_fail
           command: |
-            # Your code here
-            aws cloudformation delete-stack --stack-name UdaPeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-            aws cloudformation delete-stack --stack-name UdaPeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
-            aws s3 rb s3://UdaPeople-${CIRCLE_WORKFLOW_ID:0:7} --force
-            #exit 1
-
+            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive 2> /dev/null
+            aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:7}
+            aws cloudformation delete-stack --stack-name backend-${CIRCLE_WORKFLOW_ID:0:7}
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      # Add parameter here     
+    # Add parameter here     
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
-            if(( $SUCCESS==1 )); 
+            curl -H "token: a69d49ff-fa6e-4f73-86ad-ae03427eb4eb" --request GET "https://api.memstash.io/values/Migration" > SUCCESS
+            if(( $SUCCESS=="fail" ));
             then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
+              cd ~/project/backend
+              npm install
+              cat .env
+              npm run migrations:revert
             fi
             
 jobs:
@@ -302,27 +297,27 @@ jobs:
           name: Deploy backend
           no_output_timeout: 10m
           command: |
-            cd backend
-            sudo apt update
-            sudo apt install -y awscli
-            sudo npm install
-            npm i
-            npm run build
-            # Zip the directory
-            tar -C backend -czvf artifact.tar.gz .
-            cd .circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
-            cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml
+            # cd backend
+            # sudo apt update
+            # sudo apt install -y awscli
+            # sudo npm install
+            # npm i
+            # npm run build
+            # # Zip the directory
+            # tar -C backend -czvf artifact.tar.gz .
+            # cd .circleci/ansible
+            # echo "Contents  of the inventory.txt file is -------"
+            # cat inventory.txt
+            # ansible-playbook -i inventory.txt deploy-backend.yml
 
-            #echo [web] > inventory.txt
-            #aws ec2 describe-instances \
-              #--region us-west-2 \
-              #--filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              #--query 'Reservations[*].Instaces[*].PublicIpAddress' \
-              #--output text >> inventory.txt
-            #cd .circleci/ansible
-            #ansible-playbook -i inventory.txt deploy-backend.yml
+            echo [web] > inventory.txt
+            aws ec2 describe-instances \
+              --region us-west-2 \
+              --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --query 'Reservations[*].Instaces[*].PublicIpAddress' \
+              --output text >> inventory.txt
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt deploy-backend.yml
                 # your code here
         # Here's where you will add some code to rollback on failure  
 
