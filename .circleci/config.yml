@@ -301,18 +301,18 @@ jobs:
     - run:
         name: Deploy backend
         command: |
-      no_output_timeout: 10m
-      command: |
-        echo [web] > inventory.txt
-        aws ec2 describe-instances \
-          --region us-west-2 \
-          --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-          --query 'Reservations[*].Instaces[*].PublicIpAddress' \
-          --output text >> inventory.txt
-        cd .circleci/ansible
-        ansible-playbook -i inventory.txt deploy-backend.yml
-          # your code here
-    # Here's where you will add some code to rollback on failure  
+        no_output_timeout: 10m
+        command: |
+          echo [web] > inventory.txt
+          aws ec2 describe-instances \
+            --region us-west-2 \
+            --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --query 'Reservations[*].Instaces[*].PublicIpAddress' \
+            --output text >> inventory.txt
+          cd .circleci/ansible
+          ansible-playbook -i inventory.txt deploy-backend.yml
+            # your code here
+      # Here's where you will add some code to rollback on failure  
 
 #   smoke-test:
 #     docker:
