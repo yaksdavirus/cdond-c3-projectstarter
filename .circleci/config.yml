@@ -303,9 +303,11 @@ jobs:
           no_output_timeout: 10m
           command: |
             cd backend
+            sudo apt update
+            sudo apt install -y awscli
+            sudo npm install
             npm i
             npm run build
-            cd ..
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible
