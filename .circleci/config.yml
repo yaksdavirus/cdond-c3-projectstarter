@@ -298,7 +298,7 @@ jobs:
           no_output_timeout: 10m
           command: |
             cd backend
-            npm install
+            npm install --force
             npm run build
             cd ..
             tar -C backend -czvf code.tar.gz .
