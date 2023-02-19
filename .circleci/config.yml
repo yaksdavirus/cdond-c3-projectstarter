@@ -302,14 +302,25 @@ jobs:
           name: Deploy backend
           no_output_timeout: 10m
           command: |
-            echo [web] > inventory.txt
-            aws ec2 describe-instances \
-              --region us-west-2 \
-              --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query 'Reservations[*].Instaces[*].PublicIpAddress' \
-              --output text >> inventory.txt
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            # Zip the directory
+            tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
+
+            #echo [web] > inventory.txt
+            #aws ec2 describe-instances \
+              #--region us-west-2 \
+              #--filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              #--query 'Reservations[*].Instaces[*].PublicIpAddress' \
+              #--output text >> inventory.txt
+            #cd .circleci/ansible
+            #ansible-playbook -i inventory.txt deploy-backend.yml
                 # your code here
         # Here's where you will add some code to rollback on failure  
 
