@@ -168,6 +168,9 @@ jobs:
           - project/.circleci/ansible/inventory.txt
        # Here's where you will add some code to rollback on failure      
 
+    - destroy-environment:
+        workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
   configure-infrastructure:
     docker:
       - image: python:3.7-alpine3.11
@@ -196,7 +199,13 @@ jobs:
           cat inventory.txt
           ansible-playbook -i inventory.txt configure-server.yml
           #exit 1
-      # Here's where you will add some code to rollback on failure      
+      # Here's where you will add some code to rollback on failure    
+    - persist_to_workspace:
+        root: ~/
+        paths:
+          - project/backend
+    - destroy-environment:
+        workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  
 
   run-migrations:
     docker:
@@ -226,6 +235,8 @@ jobs:
             curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
           fi
           #exit 1
+    - destroy-environment:
+        workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   # Here's where you will add some code to rollback on failure      
 
   deploy-frontend:
@@ -272,7 +283,11 @@ jobs:
           arguments: '--recursive'
           from: ~/project/frontend/dist
           to: 's3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}'
-      # Here's where you will add some code to rollback on failure      
+      # Here's where you will add some code to rollback on failure    
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  
                     
   deploy-backend:
     docker:
@@ -308,6 +323,10 @@ jobs:
             echo "Contents of the inventory.txt file is ------$(cat inventory.txt)"
             ansible-playbook -i inventory.txt deploy-backend.yml
         # Here's where you will add some code to rollback on failure  
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   smoke-test:
     docker:
@@ -343,6 +362,10 @@ jobs:
             echo $URL
             if curl ${URL} | grep "Welcome"; then return 0; else return 1; fi
       # Here's where you will add some code to rollback on failure  
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
 #   cloudfront-update:
 #     docker:
