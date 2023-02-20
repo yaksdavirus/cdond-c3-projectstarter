@@ -22,7 +22,7 @@
     global: yes
     state: latest
     production: yes
-- name: extract artifact
+- name: extract code
   become: yes
   unarchive:
     src: files/code.tar.gz
