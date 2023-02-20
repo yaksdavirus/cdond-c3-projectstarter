@@ -34,7 +34,6 @@ commands:
             npm install --force
             npm run build
             npm run migrations:revert
-            fi
             
 jobs:
   build-frontend:
