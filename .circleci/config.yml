@@ -316,7 +316,7 @@ jobs:
     steps:
       # Checkout code from git
       -checkout
-      - run:
+      - run: 
           name: Install dependencies
           command: |
             # your code here
